@@ -24,7 +24,6 @@ pipeline {
     
     environment {
         REGISTRY_ID = 'crpch0cjeu3o3a0vqps4'
-        // 1. Поменяли название образа на myproject-app
         IMAGE_NAME  = "cr.yandex/${REGISTRY_ID}/myproject-app:${env.BUILD_NUMBER}"
     }
     
@@ -62,13 +61,11 @@ pipeline {
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  // 2. Поменяли имя деплоймента
   name: myproject-deployment
 spec:
   replicas: 2
   selector:
     matchLabels:
-      // 3. Поменяли селекторы и метки
       app: myproject-web-app
   template:
     metadata:
@@ -83,7 +80,6 @@ spec:
       imagePullSecrets:
       - name: ycr-secret
 EOF
-                    // 4. Указываем деплоить в новый неймсейс myproject-app
                     kubectl apply -n myproject-app -f deploy.yaml
                     '''
                 }
