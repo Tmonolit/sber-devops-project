@@ -9,8 +9,9 @@ pipeline {
     stages {
         stage('Security Check & Connection') {
             steps {
-                echo 'Привет! Соединение установлено.'
+                echo 'Привет! Соединение установлено. Проверяем автоматику Jenkins.'
                 echo 'Это первый успешный запуск пайплайна через Poll SCM.'
+                echo 'Это второй успешный запуск пайплайна через Poll SCM.'
             }
         }
     }
