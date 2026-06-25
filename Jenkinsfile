@@ -23,9 +23,9 @@ pipeline {
     }
     
     environment {
-        // Ваш ID реестра уже вписан
         REGISTRY_ID = 'crpch0cjeu3o3a0vqps4'
-        IMAGE_NAME  = "cr.yandex/${REGISTRY_ID}/sber-app:${env.BUILD_NUMBER}"
+        // 1. Поменяли название образа на myproject-app
+        IMAGE_NAME  = "cr.yandex/${REGISTRY_ID}/myproject-app:${env.BUILD_NUMBER}"
     }
     
     triggers {
@@ -45,14 +45,8 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'yandex-registry-cred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                         sh '''
                         mkdir -p /kaniko/.docker
-                        
-                        # Профессиональный подход: кодируем связку логин:пароль в Base64
                         AUTH=$(echo -n "$USER:$PASS" | base64 | tr -d '\n' | tr -d '\r')
-                        
-                        # Безопасно записываем закодированный ключ
                         echo '{"auths": {"cr.yandex": {"auth": "'$AUTH'"}}}' > /kaniko/.docker/config.json
-                        
-                        # Запускаем сборку
                         /kaniko/executor --context `pwd` --dockerfile `pwd`/Dockerfile --destination $IMAGE_NAME
                         '''
                     }
@@ -68,16 +62,18 @@ pipeline {
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sber-app-deployment
+  // 2. Поменяли имя деплоймента
+  name: myproject-deployment
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: sber-web-app
+      // 3. Поменяли селекторы и метки
+      app: myproject-web-app
   template:
     metadata:
       labels:
-        app: sber-web-app
+        app: myproject-web-app
     spec:
       containers:
       - name: web-app
@@ -87,7 +83,8 @@ spec:
       imagePullSecrets:
       - name: ycr-secret
 EOF
-                    kubectl apply -n sber-app -f deploy.yaml
+                    // 4. Указываем деплоить в новый неймсейс myproject-app
+                    kubectl apply -n myproject-app -f deploy.yaml
                     '''
                 }
             }
