@@ -23,7 +23,7 @@ pipeline {
     }
     
     environment {
-        REGISTRY_ID = '<crpch0cjeu3o3a0vqps4>'
+        REGISTRY_ID = 'crpch0cjeu3o3a0vqps4'
         IMAGE_NAME  = "cr.yandex/${REGISTRY_ID}/sber-app:latest"
     }
     
