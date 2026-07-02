@@ -57,7 +57,7 @@ pipeline {
             steps {
                 container('kubectl') {
                     sh '''
-                    cat "EOF > deploy.yaml
+                    cat <<EOF > deploy.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
